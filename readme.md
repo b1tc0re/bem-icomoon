@@ -68,4 +68,4 @@ You're done :)
 ### BEMJSON
 ```js
 { block: 'icon', mods: { bg: 'accessibility' } }
-{ block: 'icon', mods: { glyph: 'accessibility' } } // style regular
+{ block: 'icon', mods: { glyph: 'accessibility' } }
