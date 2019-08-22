@@ -72,26 +72,28 @@ module.exports = {
      */
     build : function() {
         postcss([this.getPostcssPlugin()]).process(this.icomoonCssContent).then(result => {
-            fontBlast(PATH.join(this.icomoonSource, 'fonts', 'icomoon.svg'), 'tmp', { filenames: this.glyphToEntityMap });
 
-            const readGlyphs = {};
+            fontBlast(PATH.join(this.icomoonSource, 'fonts', 'icomoon.svg'), 'tmp', { filenames: this.glyphToEntityMap }).then((x,s) => {
 
-            Promise.all(Object.keys(this.entityToGlyphMap).map( entity => {
+                const readGlyphs = {};
 
-                const glyphId  = this.entityToGlyphMap[entity];
-                const filename = this.glyphToEntityMap[glyphId] + '.svg';
-                const modVal = entity.split('_').pop();
-                const svgContent = readGlyphs[filename] || (readGlyphs[filename] = FS.readFileSync(PATH.join('tmp', 'svg', filename), 'utf8'));
-                const path = PATH.join(this.block, '_' + this.glyph, this.block + '_' + this.glyph + '_' + modVal);
+                Promise.all(Object.keys(this.entityToGlyphMap).map( entity => {
 
-                FS.writeFileSync(path + '.bemhtml.js' , TPL.initialize(this.glyph).bemhtml(modVal, svgContent));
-                FS.writeFileSync(path + '.bh.js' , TPL.initialize(this.glyph).bhJs(modVal, svgContent));
-                FS.writeFileSync(path + '.bh.php' , TPL.initialize(this.glyph).bhPhp(modVal, svgContent));
+                    const glyphId  = this.entityToGlyphMap[entity];
+                    const filename = this.glyphToEntityMap[glyphId] + '.svg';
+                    const modVal = entity.split('_').pop();
+                    const svgContent = readGlyphs[filename] || (readGlyphs[filename] = FS.readFileSync(PATH.join('tmp', 'svg', filename), 'utf8'));
+                    const path = PATH.join(this.block, '_' + this.glyph, this.block + '_' + this.glyph + '_' + modVal);
 
-                return mv(PATH.join('tmp', 'svg', filename), PATH.join(__dirname, this.block, '_' + this.background, filename), err => {
-                    if (err && err.code !== 'ENOENT') console.error(err);
-                });
-            }));
+                    FS.writeFileSync(path + '.bemhtml.js' , TPL.initialize(this.glyph).bemhtml(modVal, svgContent));
+                    FS.writeFileSync(path + '.bh.js' , TPL.initialize(this.glyph).bhJs(modVal, svgContent));
+                    FS.writeFileSync(path + '.bh.php' , TPL.initialize(this.glyph).bhPhp(modVal, svgContent));
+
+                    return mv(PATH.join('tmp', 'svg', filename), PATH.join(__dirname, this.block, '_' + this.background, filename), err => {
+                        if (err && err.code !== 'ENOENT') console.error(err);
+                    });
+                }));
+            });
         });
     },
 
