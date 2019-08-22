@@ -1,0 +1,38 @@
+{
+  "name": "bem-icomoon",
+  "version": "0.0.1",
+  "description": "IcoMoon icons extracted as SVG in BEM notation",
+  "main": "generate.js",
+  "scripts": {
+    "build": "node generate",
+    "prepublish": "npm run drop-cache && npm run build",
+    "drop-cache": "rm -rf icon && rm -rf tmp",
+    "test": "npm run drop-cache && npm run build"
+  },
+  "files": [
+    "icon"
+  ],
+  "keywords": [
+    "bem",
+    "icomoon",
+    "bem-icomoon"
+  ],
+  "homepage": "https://github.com/b1tc0re/bem-icomoon",
+  "bugs": {
+    "url": "https://github.com/b1tc0re/bem-icomoon/issues/new"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/b1tc0re/bem-icomoon.git"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "author": "b1tc0re <b1tc0re@yandex.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "postcss": "^7.0.17",
+    "font-blast": "^0.7.0",
+    "mv": "^2.1.1"
+  }
+}
